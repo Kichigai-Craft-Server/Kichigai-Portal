@@ -1,0 +1,15 @@
+{
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Ministry of ==Sorcery=="
+    },
+    {
+      "type": "h1",
+      "text": "【概要】"
+    },
+    {
+      "type": "placeholder"
+    }
+  ]
+}

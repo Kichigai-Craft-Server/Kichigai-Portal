@@ -1,0 +1,22 @@
+{
+  "blocks": [
+    {
+      "type": "p",
+      "text": "Q-ichi Bio Labが所有する特許についてまとめました！以下からご覧ください。"
+    },
+    {
+      "type": "h1",
+      "text": "【所有特許一覧 📃】"
+    },
+    {
+      "type": "links",
+      "pages": [
+        "patent-lava",
+        "patent-hole",
+        "patent-cats",
+        "patent-root",
+        "patent-gate"
+      ]
+    }
+  ]
+}

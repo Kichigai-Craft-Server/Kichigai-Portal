@@ -1,0 +1,225 @@
+[
+  {
+    "id": "news-notion-launch",
+    "title": "キチクラ 公式Notion 発足！",
+    "parent": null,
+    "section": "news",
+    "tag": "Notion関連",
+    "date": "2026-01-14T16:06",
+    "author": "いちのすけ"
+  },
+  {
+    "id": "news-qbl-patents",
+    "title": "Q-ichi Bio Lab 所有特許紹介 📃",
+    "parent": null,
+    "section": "news",
+    "tag": "広告",
+    "date": "2026-01-20T07:07",
+    "author": "いちのすけ"
+  },
+  {
+    "id": "news-s2-mod-survey",
+    "title": "【重要】Season 2 の MOD希望調査",
+    "parent": null,
+    "section": "news",
+    "tag": "運営",
+    "date": "2026-02-08T22:10",
+    "author": "いちのすけ"
+  },
+
+  {
+    "id": "season-0",
+    "title": "Season 0（アーカイブ済）",
+    "parent": null,
+    "section": "seasons",
+    "mark": "S0",
+    "color": "stone",
+    "badge": "アーカイブ",
+    "summary": ""
+  },
+  {
+    "id": "season-1",
+    "title": "Season 1",
+    "parent": null,
+    "section": "seasons",
+    "mark": "S1",
+    "color": "green",
+    "summary": "主要MODリスト"
+  },
+  {
+    "id": "season-2",
+    "title": "Season 2",
+    "parent": null,
+    "section": "seasons",
+    "mark": "S2",
+    "color": "blue",
+    "thumb": "assets/img/season-2/city-plan-cover.webp",
+    "summary": "都市計画書・工業計画書"
+  },
+  {
+    "id": "s2-city-plan",
+    "title": "都市計画書",
+    "parent": "season-2",
+    "icon": "🏙️",
+    "cover": "assets/img/season-2/city-plan-cover.webp",
+    "summary": "キチクラS2の都市「キチノミヤ」の開発プロトコル及び産業計画の方針"
+  },
+  {
+    "id": "s2-industry-plan",
+    "title": "工業計画書",
+    "parent": "season-2",
+    "icon": "🏭",
+    "summary": "Createを使った生産フロー・設備設計"
+  },
+  {
+    "id": "s2-andesite-alloy",
+    "title": "安山岩合金無限生産フロー",
+    "parent": "s2-industry-plan",
+    "icon": "⚙️",
+    "summary": "安山岩合金を低コストで無限生産するフローの提案"
+  },
+  {
+    "id": "s2-ore-processing",
+    "title": "鉱石粉砕＆一括洗浄",
+    "parent": "s2-industry-plan",
+    "icon": "⛏️",
+    "summary": "破砕ホイールでの粉砕と一括洗浄の産出物一覧"
+  },
+  {
+    "id": "s2-steam-engine",
+    "title": "蒸気機関設計",
+    "parent": "s2-industry-plan",
+    "icon": "♨️",
+    "summary": "焚き火駆動型「SE01_CampFire」ほか"
+  },
+  {
+    "id": "season-3",
+    "title": "Season 3",
+    "parent": null,
+    "section": "seasons",
+    "mark": "S3",
+    "color": "purple",
+    "summary": ""
+  },
+
+  {
+    "id": "mkit",
+    "title": "キチ土交通省 (MKIT)",
+    "parent": null,
+    "section": "orgs",
+    "mark": "MKIT",
+    "color": "gold",
+    "summary": "Ministry of Land, Infrastructure, Transport and Tourism"
+  },
+  {
+    "id": "ude-hd",
+    "title": "UDE HD.",
+    "parent": null,
+    "section": "orgs",
+    "mark": "UDE",
+    "color": "red",
+    "thumb": "assets/img/ude-hd/hero.webp",
+    "summary": "地下帝国開発ホールディングス株式会社"
+  },
+  {
+    "id": "ude-hd-season-1",
+    "title": "Season 1",
+    "parent": "ude-hd",
+    "icon": "📜",
+    "summary": "ポリシー・歴史・1つ目の街"
+  },
+  {
+    "id": "q1hd",
+    "title": "q1hd.",
+    "parent": null,
+    "section": "orgs",
+    "mark": "Q1",
+    "color": "green",
+    "summary": "Q-ICHI Inc. (Holdings)"
+  },
+  {
+    "id": "q1hd-site",
+    "title": "q1-hd.com",
+    "parent": "q1hd",
+    "icon": "🌐",
+    "summary": "〜 Quest to Convenience 〜"
+  },
+  {
+    "id": "patent-lava",
+    "title": "無限マグマ回収釜「L.A.V.A.」",
+    "parent": "q1hd-site",
+    "icon": "🌋",
+    "summary": "Lava Automated Vat Area"
+  },
+  {
+    "id": "patent-hole",
+    "title": "NFF MOB捕獲装置「H.O.L.E.」",
+    "parent": "q1hd-site",
+    "icon": "🕳️",
+    "summary": "Host Offer Lock Engage"
+  },
+  {
+    "id": "patent-cats",
+    "title": "対ファントム防衛システム「C.A.T.S.」",
+    "parent": "q1hd-site",
+    "icon": "🐈",
+    "summary": "Concealed Anti-phantom Thwarting System"
+  },
+  {
+    "id": "patent-root",
+    "title": "全自動資源輸送ターミナル「R.O.O.T.」",
+    "parent": "q1hd-site",
+    "icon": "🚃",
+    "summary": "Resource Output Organization Terminal"
+  },
+  {
+    "id": "patent-gate",
+    "title": "ネザーゲート駆動式チャンクローダー「G.A.T.E.」",
+    "parent": "q1hd-site",
+    "icon": "🌀",
+    "summary": "Gate-triggered Active Terrain Engine"
+  },
+  {
+    "id": "kig",
+    "title": "Kichi Indstrie Gmbh.",
+    "parent": null,
+    "section": "orgs",
+    "mark": "KIG",
+    "color": "stone",
+    "summary": ""
+  },
+  {
+    "id": "kr",
+    "title": "KR “Kichi-Railway”",
+    "parent": null,
+    "section": "orgs",
+    "mark": "KR",
+    "color": "blue",
+    "summary": ""
+  },
+  {
+    "id": "ministry-of-sorcery",
+    "title": "魔術省",
+    "parent": null,
+    "section": "orgs",
+    "mark": "魔",
+    "color": "purple",
+    "summary": "Ministry of Sorcery"
+  },
+  {
+    "id": "chinmanro",
+    "title": "拉麺　珍萬楼",
+    "parent": null,
+    "section": "orgs",
+    "mark": "珍",
+    "color": "gold",
+    "summary": "〜 珍不離心，萬不離眾 〜"
+  },
+  {
+    "id": "chinmanro-process",
+    "title": "工程",
+    "parent": "chinmanro",
+    "icon": "🍜",
+    "summary": "食材ごとの生産工程"
+  }
+]

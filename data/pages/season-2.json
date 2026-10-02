@@ -1,0 +1,12 @@
+{
+  "blocks": [
+    {
+      "type": "links",
+      "pages": [
+        "s2-city-plan",
+        "s2-industry-plan"
+      ],
+      "style": "cards"
+    }
+  ]
+}

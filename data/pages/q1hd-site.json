@@ -1,0 +1,73 @@
+{
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "〜 Quest to Convenience 〜"
+    },
+    {
+      "type": "p",
+      "text": "我々がまだ街の小さなレンタカー店だった時代から、我々の理念は変わりません。それは「サーバーの利便性を向上させること」。我々が開発した技術や提供するサービスによって、サーバーの皆様の暮らしを豊かにすることが、我々の存在意義です。"
+    },
+    {
+      "type": "toc"
+    },
+    {
+      "type": "h1",
+      "text": "【沿革 👣】"
+    },
+    {
+      "type": "placeholder"
+    },
+    {
+      "type": "h1",
+      "text": "【子会社コア事業内容 👨‍💻】"
+    },
+    {
+      "type": "h2",
+      "text": "Q-ichi Bio Lab Rdc.（QBL）：研究開発事業"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "事業子会社への技術提供",
+        "MOD研究開発"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Q-ichi Automotive Systems Inc.（QAS）：モビリティ事業"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "馬の繁殖、管理、レンタル",
+        "処分基準の制定"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Q-ichi Trading Post Inc.（QTP）：貿易事業"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "奇治街特別自治区における司書市場操作",
+        "特別行政活動"
+      ]
+    },
+    {
+      "type": "h1",
+      "text": "【QBL所有特許一覧 📃】"
+    },
+    {
+      "type": "links",
+      "pages": [
+        "patent-lava",
+        "patent-hole",
+        "patent-cats",
+        "patent-root",
+        "patent-gate"
+      ]
+    }
+  ]
+}
