@@ -52,7 +52,6 @@
       "folder": "pages/diary",
       "sort": "date",
       "defaultMark": "📔",
-      "password": "gagainogai",
       "empty": "日記はまだありません。"
     },
     "orgs": {
@@ -90,7 +89,9 @@
     "運営": "red",
     "広告": "green",
     "Notion関連": "aqua",
-    "イベント": "gold"
+    "イベント": "gold",
+    "ポータル関連": "aqua",
+    "シーズン": "gold"
   },
   "callouts": {
     "NOTE": {

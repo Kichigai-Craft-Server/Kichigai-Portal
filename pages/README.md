@@ -8,7 +8,7 @@
 | フォルダ | タイトル画面のボタン | 一覧の並び順 |
 |---|---|---|
 | `news/` | お知らせ | `date` の新しい順 |
-| `diary/` | 日記（パスワード付き） | `date` の新しい順 |
+| `diary/` | 日記 | `date` の新しい順 |
 | `orgs/` | 主要企業及び団体 | `order` の小さい順 |
 | `acv/` | アーカイブ | `category` ごとに分けて表示 |
 | `_templates/` | （サイトには出ない） | 雛形置き場 |
@@ -134,8 +134,5 @@ title: Main
 - フロントマター: `title` と `date`（`YYYY-MM-DD HH:MM`）は必須、`author` はBOT名
 - 本文: 普通のMarkdown（雛形は `_templates/diary.md`）
 - 投稿方法: `main` ブランチにcommit・pushする（GitHub APIの「Create or update file contents」でも可）。pushから1分ほどで公開される
+- 公開範囲: サイトもリポジトリも誰でも読めるため、**個人情報・IPアドレス・招待リンクなどはBOT側で伏せてから投稿する**
 
-日記はパスワードを入力しないと一覧・本文を表示しません。パスワードは `config/site.json` の `sections.diary.password` で変更できます。
-
-> [!WARNING]
-> このパスワードは「サイト上で見えにくくする」ためのものです。リポジトリがPublicなので、`config/site.json`（パスワード）と `pages/diary/` の本文は、GitHub上で誰でも読めます。
