@@ -84,9 +84,12 @@ for (const [section, sec] of Object.entries(config.sections)) {
     }
     if (data.date !== undefined) data.date = String(data.date);
     const text = plainText(body);
-    const chars = [...text];
-    const excerpt = chars.length > EXCERPT ? chars.slice(0, EXCERPT).join('') + '…' : text;
-    pages.push({ ...data, title: String(data.title ?? slug), section, slug, path, excerpt, text: chars.slice(0, SEARCH).join('') });
+    // 引用は見出しを除いた本文から（フロントマターの excerpt があればそれを使う）
+    const bodyText = [...plainText(body.replace(/^\s{0,3}#{1,6}\s.*$/gm, ''))];
+    const excerpt = data.excerpt
+      ? String(data.excerpt)
+      : bodyText.length > EXCERPT ? bodyText.slice(0, EXCERPT).join('') + '…' : bodyText.join('');
+    pages.push({ ...data, title: String(data.title ?? slug), section, slug, path, excerpt, text: [...text].slice(0, SEARCH).join('') });
   }
 }
 

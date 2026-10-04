@@ -83,7 +83,7 @@
         <a class="screen-head__logo" href="#/" aria-label="${esc(ui('toTitle'))}"><img src="${esc(c.smallLogo)}" alt=""></a>
         <nav class="crumbs" aria-label="パンくずリスト"><ol>${crumbHTML}</ol></nav>
       </header>
-      <h1 class="screen-title">${esc(title)}</h1>
+      ${title ? `<h1 class="screen-title">${esc(title)}</h1>` : ''}
       ${sub ? `<p class="screen-sub">${sub}</p>` : ''}
       <div class="panel">${body}</div>
       <div class="screen-foot">${foot}</div>
@@ -390,6 +390,106 @@
     });
   }
 
+  // ---------- 企業サイト風レイアウト（フロントマター layout: corporate） ----------
+  // ・「## ENGLISH / 日本語」の見出し → 英字の小見出し付きセクション
+  // ・### 見出し → カード（同じセクション内で横に並ぶ）
+  // ・番号付きリスト → 沿革のタイムライン（**太字だけの項目** は節目として強調）
+  // ・「名前：説明（建設予定）」の箇条書き → 施設リスト（括弧内はバッジ）
+  // ・「| 項目 | 内容 |」の表 → 会社概要の表
+  const STATUS = /（(建設予定|計画中|準備中|稼働中|休止中)）/g;
+
+  function corporate(body) {
+    const sections = [];
+    // h2 ごとにセクションへ分割
+    [...body.querySelectorAll(':scope > h2')].forEach((h) => {
+      const sec = document.createElement('section');
+      sec.className = 'corp-section';
+      h.before(sec);
+      let n = h;
+      do {
+        const next = n.nextElementSibling;
+        sec.appendChild(n);
+        n = next;
+      } while (n && n.tagName !== 'H2');
+      const m = /^\s*([^/]+?)\s*\/\s*(.+)$/.exec(h.textContent);
+      h.classList.add('corp-h');
+      if (m) h.innerHTML = `<span class="corp-h__en">${esc(m[1])}</span><span class="corp-h__ja">${esc(m[2])}</span>`;
+      sections.push({ id: h.id, label: m ? m[1] : h.textContent });
+    });
+
+    // h3 ごとにカードへ分割し、連続するカードをグリッドに
+    body.querySelectorAll('.corp-section').forEach((sec) => {
+      let grid = null;
+      [...sec.children].forEach((el) => {
+        if (el.tagName === 'H3') {
+          const card = document.createElement('article');
+          card.className = 'corp-card';
+          if (!grid || grid.nextElementSibling !== el) {
+            grid = document.createElement('div');
+            grid.className = 'corp-cards';
+            el.before(grid);
+          }
+          grid.appendChild(card);
+          // 「名前 ── 説明」の見出しは、名前と小見出しに分ける
+          const parts = el.innerHTML.split(/\s*[─—]{2}\s*/);
+          if (parts.length === 2) el.innerHTML = `<span class="corp-card__title">${parts[0]}</span><span class="corp-card__sub">${parts[1]}</span>`;
+          let n = el;
+          do {
+            const next = n.nextElementSibling;
+            card.appendChild(n);
+            n = next;
+          } while (n && !/^H[23]$/.test(n.tagName));
+        }
+      });
+    });
+
+    body.querySelectorAll('.corp-card li').forEach((li) => {
+      if (li.querySelector('ul, ol')) return;
+      const html = li.innerHTML;
+      const i = html.indexOf('：');
+      if (i < 1) return;
+      const desc = html.slice(i + 1).replace(STATUS, '<span class="corp-badge">$1</span>');
+      li.classList.add('fac');
+      li.innerHTML = `<span class="fac__name">${html.slice(0, i)}</span><span class="fac__desc">${desc}</span>`;
+    });
+
+    body.querySelectorAll('ol').forEach((ol) => {
+      ol.classList.add('corp-timeline');
+      ol.querySelectorAll(':scope > li').forEach((li) => {
+        const strong = li.querySelector(':scope > strong');
+        if (strong && strong.textContent.trim() === li.textContent.trim()) li.classList.add('is-milestone');
+      });
+    });
+
+    body.querySelectorAll('blockquote').forEach((bq) => {
+      if (bq.textContent.trim().length <= 40) bq.classList.add('corp-sign');
+    });
+
+    body.querySelectorAll('table').forEach((t) => {
+      const heads = [...t.querySelectorAll('thead th')].map((th) => th.textContent.trim());
+      if (heads.join('|') === '項目|内容') t.classList.add('corp-profile');
+    });
+    return sections;
+  }
+
+  function corpHeroHTML(page, sections) {
+    const facts = String(page.facts || '').split('|')
+      .map((s) => s.split('='))
+      .filter((kv) => kv.length === 2 && kv[0].trim());
+    return `<header class="corp-hero tile-${esc(page.color || 'stone')}">
+        ${page.cover ? `<img class="corp-hero__bg" src="${esc(page.cover)}" alt="">` : ''}
+        <div class="corp-hero__inner">
+          ${page.eyebrow ? `<p class="corp-hero__eyebrow">${esc(page.eyebrow)}</p>` : ''}
+          <h1 class="corp-hero__name">${esc(page.title)}</h1>
+          ${page.catch ? `<p class="corp-hero__catch">${esc(page.catch)}</p>` : ''}
+          ${page.lead ? `<p class="corp-hero__lead">${esc(page.lead)}</p>` : ''}
+          ${facts.length ? `<dl class="corp-facts">${facts.map(([k, v]) => `<div><dt>${esc(k.trim())}</dt><dd>${esc(v.trim())}</dd></div>`).join('')}</dl>` : ''}
+        </div>
+      </header>
+      ${sections.length > 1 ? `<nav class="corp-nav" aria-label="ページ内メニュー">${sections
+        .map((s) => `<a href="${pageHref(page, s.id)}">${esc(s.label)}</a>`).join('')}</nav>` : ''}`;
+  }
+
   async function renderPage(section, slug, anchor) {
     const page = findPage(section, slug);
     const sec = sectionOf(section);
@@ -407,7 +507,12 @@
       : `<p class="empty">${esc(ui('placeholder'))}</p>`;
     enhance(body, page, ctx);
 
-    if (page.toc && ctx.headings.length) {
+    const isCorp = page.layout === 'corporate';
+    let hero = '';
+    if (isCorp) {
+      body.classList.add('md--corp', `tile-${page.color || 'stone'}`);
+      hero = corpHeroHTML(page, corporate(body));
+    } else if (page.toc && ctx.headings.length) {
       const toc = document.createElement('nav');
       toc.className = 'toc';
       toc.setAttribute('aria-label', ui('toc'));
@@ -444,9 +549,9 @@
     setMode('menu');
     app.innerHTML = screenHTML({
       crumbs,
-      title: page.title,
-      sub,
-      body: `${page.cover ? `<figure class="figure"><img src="${esc(page.cover)}" alt=""></figure>` : ''}<div class="md-slot"></div>${childHTML}${tools}`,
+      title: isCorp ? '' : page.title,
+      sub: isCorp ? '' : sub,
+      body: `${isCorp ? hero : page.cover ? `<figure class="figure"><img src="${esc(page.cover)}" alt=""></figure>` : ''}<div class="md-slot"></div>${childHTML}${tools}`,
       foot: backBtn(parent ? pageHref(parent) : `#/${section}`) + titleBtn(),
     });
     app.querySelector('.md-slot').replaceWith(body);
