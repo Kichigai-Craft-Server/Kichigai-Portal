@@ -1,0 +1,3 @@
+# pages/ から自動生成される（GitHub Actions がpushのたびに作り直す）
+pages/index.json
+.DS_Store

@@ -1,0 +1,99 @@
+{
+  "siteName": "キチクラ 公式ポータル",
+  "description": "茨城高専電気科OBによるMinecraftマルチサーバー「キチクラ（キチガイクラフト / Kichigai-Craft）」の公式ポータルです。",
+
+  "title": {
+    "logo": "assets/img/logo/kichigaicraft.png",
+    "logoAlt": "KICHIGAICRAFT",
+    "splash": ["Season 3!!"],
+    "version": "Minecraft 1.20.1",
+    "copyright": "Copyright KichigaiCraft. Do not come to your senses!"
+  },
+
+  "background": {
+    "light": "assets/img/bg/light.webp",
+    "dark": "assets/img/bg/dark.webp"
+  },
+
+  "smallLogo": "assets/img/logo/kc.png",
+
+  "menu": [
+    { "label": "お知らせ", "section": "news" },
+    { "label": "シーズン", "section": "seasons" },
+    { "label": "主要企業及び団体", "section": "orgs" },
+    { "label": "GitHub", "href": "https://github.com/Kichigai-Craft-Server/Kichigai-Portal", "half": true },
+    { "label": "アーカイブ", "section": "acv", "half": true }
+  ],
+
+  "sections": {
+    "news": {
+      "title": "お知らせ",
+      "folder": "pages/news",
+      "sort": "date",
+      "defaultMark": "🔔",
+      "empty": "お知らせはまだありません。"
+    },
+    "seasons": {
+      "title": "シーズン",
+      "folder": "pages/seasons",
+      "sort": "order",
+      "empty": "シーズンのページはまだありません。"
+    },
+    "orgs": {
+      "title": "主要企業及び団体",
+      "folder": "pages/orgs",
+      "sort": "order",
+      "empty": "企業・団体のページはまだありません。"
+    },
+    "acv": {
+      "title": "アーカイブ",
+      "folder": "pages/acv",
+      "sort": "order",
+      "groupBy": "category",
+      "groups": [
+        { "key": "news", "title": "お知らせ", "sort": "date" },
+        { "key": "seasons", "title": "シーズン", "sort": "order" },
+        { "key": "orgs", "title": "主要企業及び団体", "sort": "order" }
+      ],
+      "empty": "アーカイブはまだありません。"
+    }
+  },
+
+  "tagColors": {
+    "運営": "red",
+    "広告": "green",
+    "Notion関連": "aqua",
+    "イベント": "gold"
+  },
+
+  "callouts": {
+    "NOTE": { "icon": "ℹ️", "label": "メモ" },
+    "TIP": { "icon": "💡", "label": "ヒント" },
+    "IMPORTANT": { "icon": "📌", "label": "重要" },
+    "WARNING": { "icon": "⚠️", "label": "注意" },
+    "CAUTION": { "icon": "⛔", "label": "警告" }
+  },
+
+  "disclaimer": "NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.",
+
+  "ui": {
+    "loading": "ワールドを読み込み中…",
+    "back": "戻る",
+    "toTitle": "タイトル画面へ",
+    "toc": "目次",
+    "children": "関連ページ",
+    "notFoundTitle": "ページが見つかりません",
+    "notFoundBody": "URLが間違っているか、ページが移動・削除された可能性があります。",
+    "loadError": "データの読み込みに失敗しました。",
+    "placeholder": "このページは準備中です。",
+    "author": "作成者",
+    "date": "作成日時",
+    "tag": "タグ",
+    "editOnGitHub": "GitHubでこのページを編集"
+  },
+
+  "repo": {
+    "url": "https://github.com/Kichigai-Craft-Server/Kichigai-Portal",
+    "branch": "main"
+  }
+}

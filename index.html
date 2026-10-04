@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>キチクラ 公式ポータル</title>
-  <meta name="description" content="茨城高専電気科OBによるMinecraftマルチサーバー「キチクラ（Kichigai-Craft）」の公式ポータル。お知らせ・シーズン・主要団体の情報をまとめています。">
-  <meta name="theme-color" content="#1c1a1f">
+  <meta name="description" content="茨城高専電気科OBによるMinecraftマルチサーバー「キチクラ（Kichigai-Craft）」の公式ポータル。">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#101014">
   <meta property="og:type" content="website">
   <meta property="og:title" content="キチクラ 公式ポータル">
   <meta property="og:description" content="茨城高専電気科OBによるMinecraftマルチサーバー「キチクラ（Kichigai-Craft）」の公式ポータル。">
-  <meta property="og:site_name" content="キチクラ 公式ポータル">
 
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
@@ -18,37 +18,27 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <a class="skip-link" href="#main">本文へスキップ</a>
+  <a class="skip-link" href="#app">本文へスキップ</a>
+  <div class="panorama" aria-hidden="true"></div>
 
-  <header class="site-header">
-    <div class="site-header__inner">
-      <a class="brand" href="#/" aria-label="トップページへ">
-        <img class="brand__logo" src="assets/icons/logo.png" alt="" width="40" height="28">
-        <span class="brand__name" data-site="siteName">キチクラ 公式ポータル</span>
-      </a>
-      <nav class="site-nav" aria-label="メインメニュー" id="site-nav"></nav>
-    </div>
-  </header>
-
-  <main id="main" class="site-main" tabindex="-1">
-    <p class="state-message">読み込み中…</p>
+  <main id="app" tabindex="-1">
+    <p class="state">ワールドを読み込み中…</p>
   </main>
 
-  <footer class="site-footer">
-    <div class="site-footer__inner" id="site-footer"></div>
-  </footer>
-
   <dialog class="lightbox" id="lightbox" aria-label="画像の拡大表示">
-    <form method="dialog"><button class="lightbox__close" aria-label="閉じる">×</button></form>
+    <form method="dialog"><button class="mc-btn lightbox__close" aria-label="閉じる">×</button></form>
     <img class="lightbox__img" alt="">
     <p class="lightbox__caption"></p>
   </dialog>
 
-  <noscript><p class="state-message">このサイトの表示にはJavaScriptが必要です。</p></noscript>
+  <noscript><p class="state">このサイトの表示にはJavaScriptが必要です。</p></noscript>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/18.0.14/lib/marked.umd.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js" defer></script>
   <script src="assets/js/app.js" defer></script>
 </body>
 </html>
