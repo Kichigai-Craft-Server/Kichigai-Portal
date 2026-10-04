@@ -12,7 +12,7 @@
 | フォルダ | 表示される場所 |
 |---|---|
 | `pages/news/` | タイトル画面「お知らせ」 |
-| `pages/seasons/` | タイトル画面「シーズン」 |
+| `pages/diary/` | タイトル画面「日記」（パスワード付き。Discord BOTが毎日投稿する予定） |
 | `pages/orgs/` | タイトル画面「主要企業及び団体」 |
 | `pages/acv/` | タイトル画面「アーカイブ」（旧Notionの全ページ） |
 
@@ -29,7 +29,8 @@
 | `title.version` / `title.copyright` | 画面下の左右の文字 |
 | `background.light` / `background.dark` | ライトモード／ダークモードの背景画像 |
 | `menu` | タイトル画面のボタン（`half: true` で半分幅） |
-| `sections` | 各フォルダの見出し・並び順・空のときの文言 |
+| `sections` | 各フォルダの見出し・並び順・空のときの文言。`password` を書くとそのセクションはパスワード付きになる（日記: `sections.diary.password`） |
+| `list` | 一覧に出す本文の引用文字数（`excerptLength`）、検索対象にする本文の文字数（`searchTextLength`） |
 | `tagColors` | お知らせのタグの色（`red` `green` `aqua` `gold` `purple` `yellow` `blue`） |
 | `callouts` | `> [!NOTE]` などの枠のアイコンと見出し |
 | `ui` | ボタンや案内の文言 |
@@ -52,7 +53,7 @@ index.html               ページの外枠
 config/site.json         タイトル画面・全体の設定
 pages/                   ページ本文（Markdown）
   _templates/            雛形
-  news/ seasons/ orgs/   各セクション
+  news/ diary/ orgs/     各セクション
   acv/                   アーカイブ
 scripts/build-index.mjs  pages/ を走査して pages/index.json を作る
 assets/

@@ -36,6 +36,32 @@ function parseFrontMatter(src) {
 
 const isLocal = (p) => typeof p === 'string' && !/^([a-z]+:|\/\/|\/)/i.test(p);
 
+const listConf = config.list || {};
+const EXCERPT = listConf.excerptLength ?? 20;
+const SEARCH = listConf.searchTextLength ?? 500;
+
+// 本文からMarkdownの記号を取り除いて、一覧の引用・検索用のプレーンテキストにする
+function plainText(md) {
+  return md
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^\s*>\s*\[![A-Z]+\]\s*$/gim, ' ')
+    .replace(/^\s{0,3}(#{1,6}|>|[-*+]|\d+\.)\s+/gm, '')
+    .replace(/^\s*\|?[\s:|-]+\|[\s:|-]*$/gm, ' ')
+    .replace(/\*\*|__|~~|[*`]/g, '')
+    .replace(/\|/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// 本文中の最初の画像（ヘッダー画像がないときのアイコンに使う）
+function firstImage(md) {
+  const m = /!\[[^\]]*\]\(\s*([^)\s]+)/.exec(md);
+  return m ? m[1] : null;
+}
+
 const pages = [];
 const warnings = [];
 
@@ -46,14 +72,21 @@ for (const [section, sec] of Object.entries(config.sections)) {
     if (!file.endsWith('.md') || file.startsWith('_') || file.toLowerCase() === 'readme.md') continue;
     const slug = file.slice(0, -3);
     const path = posix.join(sec.folder, file);
-    const { data } = parseFrontMatter(readFileSync(join(dir, file), 'utf8'));
+    const { data, body } = parseFrontMatter(readFileSync(join(dir, file), 'utf8'));
     if (data.draft === true) continue;
     if (!data.title) warnings.push(`${path}: title がありません（ファイル名で代用します）`);
-    for (const key of ['thumb', 'cover']) {
+    if (!data.cover && !data.thumb) {
+      const img = firstImage(body);
+      if (img) data.image = img;
+    }
+    for (const key of ['thumb', 'cover', 'image']) {
       if (isLocal(data[key])) data[key] = posix.normalize(posix.join(sec.folder, data[key]));
     }
     if (data.date !== undefined) data.date = String(data.date);
-    pages.push({ ...data, title: String(data.title ?? slug), section, slug, path });
+    const text = plainText(body);
+    const chars = [...text];
+    const excerpt = chars.length > EXCERPT ? chars.slice(0, EXCERPT).join('') + '…' : text;
+    pages.push({ ...data, title: String(data.title ?? slug), section, slug, path, excerpt, text: chars.slice(0, SEARCH).join('') });
   }
 }
 

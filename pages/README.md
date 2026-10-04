@@ -8,7 +8,7 @@
 | フォルダ | タイトル画面のボタン | 一覧の並び順 |
 |---|---|---|
 | `news/` | お知らせ | `date` の新しい順 |
-| `seasons/` | シーズン | `order` の小さい順 |
+| `diary/` | 日記（パスワード付き） | `date` の新しい順 |
 | `orgs/` | 主要企業及び団体 | `order` の小さい順 |
 | `acv/` | アーカイブ | `category` ごとに分けて表示 |
 | `_templates/` | （サイトには出ない） | 雛形置き場 |
@@ -18,7 +18,7 @@
 
 ## 手順
 
-1. `_templates/` から雛形（`news.md` / `season.md` / `org.md` / `subpage.md`）をコピーする
+1. `_templates/` から雛形（`news.md` / `diary.md` / `org.md` / `subpage.md`）をコピーする
 2. 追加したいフォルダに置いて、ファイル名を変える
 3. 先頭の `---` で囲まれた部分（フロントマター）と本文を書き換える
 4. commitしてpushする（GitHubのWeb画面の「Add file → Create new file」からでもOK）
@@ -48,7 +48,7 @@ author: いちのすけ
 | `icon` | | タイトル横に出る絵文字 |
 | `mark` / `color` | | 画像がないときのアイコン文字と色（`stone` `green` `blue` `red` `purple` `gold` `aqua`） |
 | `thumb` | | 一覧のアイコン画像（このファイルからの相対パス） |
-| `cover` | | ページ上部に出す画像 |
+| `cover` | | ヘッダー画像。ページ上部と、一覧の左のアイコンに使う（なければ本文の最初の画像） |
 | `toc` | | `true` で見出しから目次を自動で作る |
 | `draft` | | `true` で非公開 |
 | `category` | アーカイブのみ | `news` / `seasons` / `orgs`（アーカイブ一覧の分類） |
@@ -116,3 +116,26 @@ title: Main
 
 `parent` を書いたページは一覧には出ず、親ページの下に「関連ページ」として自動で表示されます
 （親ページの本文からリンクしている場合は、二重には出ません）。
+
+## 一覧画面の表示
+
+各ボタンの先は、ワールド選択画面風の「ページを選択」画面です。1件ごとに次の3行が出ます。
+
+1. `title`
+2. `author`（`date`）
+3. 本文の先頭20文字（文字数は `config/site.json` の `list.excerptLength`）
+
+上の入力欄で、タイトル・作成者・本文の先頭（`list.searchTextLength` 文字まで）を検索できます。子ページは検索したときだけ表示されます。
+
+## 日記（Discord BOT向けの仕様）
+
+- 置き場所: `pages/diary/`
+- ファイル名: `YYYY-MM-DD.md`（例: `2026-10-05.md`）
+- フロントマター: `title` と `date`（`YYYY-MM-DD HH:MM`）は必須、`author` はBOT名
+- 本文: 普通のMarkdown（雛形は `_templates/diary.md`）
+- 投稿方法: `main` ブランチにcommit・pushする（GitHub APIの「Create or update file contents」でも可）。pushから1分ほどで公開される
+
+日記はパスワードを入力しないと一覧・本文を表示しません。パスワードは `config/site.json` の `sections.diary.password` で変更できます。
+
+> [!WARNING]
+> このパスワードは「サイト上で見えにくくする」ためのものです。リポジトリがPublicなので、`config/site.json`（パスワード）と `pages/diary/` の本文は、GitHub上で誰でも読めます。

@@ -91,28 +91,95 @@
     </div>`;
   }
 
+  // 一覧のアイコン: ヘッダー画像（cover → thumb → 本文の最初の画像）、なければ文字タイル
   function iconHTML(p) {
-    if (p.thumb) return `<img src="${esc(p.thumb)}" alt="" loading="lazy">`;
+    const img = p.cover || p.thumb || p.image;
+    if (img) return `<img src="${esc(img)}" alt="" loading="lazy">`;
     const fallback = (sectionOf(p.category) || sectionOf(p.section) || {}).defaultMark;
     const mark = p.mark || p.icon || fallback || [...p.title.replace(/[「」『』【】（）()\s“”"]/g, '')].slice(0, 2).join('');
     return `<span class="tile tile-${esc(p.color || 'stone')}">${esc(mark)}</span>`;
   }
 
+  // 「2026/02/08 22:10」形式（ワールド選択画面の日付表記に合わせる）
+  function shortDate(v) {
+    const m = /^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/.exec(v || '');
+    if (!m) return v || '';
+    const pad = (x) => String(x).padStart(2, '0');
+    return `${m[1]}/${pad(m[2])}/${pad(m[3])}${m[4] ? ` ${pad(m[4])}:${m[5]}` : ''}`;
+  }
+
+  const normalize = (s) => String(s || '').normalize('NFKC').toLowerCase();
+
+  // ワールド選択画面風の1行: タイトル / 作成者（日時） / 本文の引用
   function entryHTML(p) {
-    const meta = [
-      p.date ? `<time datetime="${esc(p.date)}">${esc(formatDate(p.date))}</time>` : '',
-      tagHTML(p.tag),
-      p.author ? `<span>${esc(p.author)}</span>` : '',
-      p.badge ? `<span class="entry__badge">${esc(p.badge)}</span>` : '',
-    ].filter(Boolean).join('');
-    return `<li><a class="entry" href="${pageHref(p)}">
-      <span class="entry__icon">${iconHTML(p)}</span>
-      <span class="entry__main">
-        <span class="entry__title">${esc(p.title)}</span>
-        ${p.summary ? `<span class="entry__sub">${esc(p.summary)}</span>` : ''}
-        ${meta ? `<span class="entry__meta">${meta}</span>` : ''}
+    const who = `${p.author || ui('unknownAuthor')}${p.date ? ` (${shortDate(p.date)})` : ''}`;
+    const quote = p.excerpt || p.summary || '';
+    const search = normalize([p.title, p.author, p.tag, p.summary, p.excerpt, p.text].filter(Boolean).join(' '));
+    return `<li data-search="${esc(search)}"><a class="world" href="${pageHref(p)}">
+      <span class="world__icon">${iconHTML(p)}</span>
+      <span class="world__text">
+        <span class="world__name">${esc(p.title)}</span>
+        <span class="world__line">${esc(who)}</span>
+        <span class="world__line">${esc(quote) || '&nbsp;'}</span>
       </span>
     </a></li>`;
+  }
+
+  // ---------- パスワード ----------
+  const unlocked = new Map();
+  const unlockKey = (key) => `kichicra-unlock:${key}`;
+  function isLocked(key) {
+    const sec = sectionOf(key);
+    if (!sec || !sec.password) return false;
+    let saved = unlocked.get(key);
+    try { saved = saved || sessionStorage.getItem(unlockKey(key)); } catch { /* 保存できない環境 */ }
+    return saved !== String(sec.password);
+  }
+  function unlock(key, value) {
+    unlocked.set(key, value);
+    try { sessionStorage.setItem(unlockKey(key), value); } catch { /* 保存できない環境 */ }
+  }
+
+  // ワールド選択画面風の枠（上: 見出し＋入力欄 / 中: リスト / 下: ボタン）
+  function selectHTML({ title, head = '', list, foot }) {
+    return `<div class="select">
+      <header class="select__head">
+        <h1 class="select__title">${esc(title)}</h1>
+        ${head}
+      </header>
+      <div class="select__list">${list}</div>
+      <footer class="select__foot">${foot}</footer>
+    </div>`;
+  }
+
+  function renderGate(key) {
+    const sec = sectionOf(key);
+    setMode('menu');
+    app.innerHTML = selectHTML({
+      title: ui('passwordTitle'),
+      list: `<form class="gate" autocomplete="off">
+        <p class="gate__label">${esc(sec.title)}</p>
+        <input class="mc-field" type="password" name="pw" aria-label="${esc(ui('passwordLabel'))}" autocomplete="current-password" required>
+        <p class="gate__error" role="alert" hidden>${esc(ui('passwordWrong'))}</p>
+        <button class="mc-btn" type="submit">${esc(ui('passwordSubmit'))}</button>
+      </form>`,
+      foot: backBtn('#/'),
+    });
+    const form = app.querySelector('.gate');
+    const input = form.querySelector('input');
+    input.focus();
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value === String(sec.password)) {
+        unlock(key, input.value);
+        state.route = '';
+        route();
+      } else {
+        form.querySelector('.gate__error').hidden = false;
+        input.select();
+      }
+    });
+    document.title = `${sec.title} | ${state.config.siteName}`;
   }
 
   const backBtn = (href) => `<a class="mc-btn" href="${href}">${esc(ui('back'))}</a>`;
@@ -153,26 +220,61 @@
   function renderSection(key) {
     const sec = sectionOf(key);
     if (!sec) return renderNotFound();
+    if (isLocked(key)) return renderGate(key);
+
     const top = state.pages.filter((p) => p.section === key && !p.parent);
-    let body;
+    // 子ページは普段は隠し、検索したときだけヒットしたものを出す
+    const withChildren = (p, depth = 0, seen = new Set()) => {
+      if (seen.has(p.slug)) return '';
+      seen.add(p.slug);
+      const kids = sortPages(state.pages.filter((q) => q.section === key && q.parent === p.slug), 'order');
+      const li = entryHTML(p);
+      return (depth ? li.replace('<li ', '<li data-child hidden ') : li) + kids.map((k) => withChildren(k, depth + 1, seen)).join('');
+    };
+    const listOf = (pages, how) => `<ul class="worlds">${sortPages(pages, how).map((p) => withChildren(p)).join('')}</ul>`;
+    let list;
     if (sec.groupBy && sec.groups) {
       const used = new Set();
-      body = sec.groups.map((g) => {
-        const list = top.filter((p) => p[sec.groupBy] === g.key);
-        list.forEach((p) => used.add(p));
-        if (!list.length) return '';
-        return `<h2 class="group-title">${esc(g.title)}</h2><ul class="entries">${sortPages(list, g.sort).map(entryHTML).join('')}</ul>`;
+      list = sec.groups.map((g) => {
+        const pages = top.filter((p) => p[sec.groupBy] === g.key);
+        pages.forEach((p) => used.add(p));
+        return pages.length ? `<section class="world-group"><h2 class="world-group__title">${esc(g.title)}</h2>${listOf(pages, g.sort)}</section>` : '';
       }).join('');
       const rest = top.filter((p) => !used.has(p));
-      if (rest.length) body += `<h2 class="group-title">その他</h2><ul class="entries">${sortPages(rest, sec.sort).map(entryHTML).join('')}</ul>`;
+      if (rest.length) list += `<section class="world-group"><h2 class="world-group__title">その他</h2>${listOf(rest, sec.sort)}</section>`;
     } else {
-      body = top.length ? `<ul class="entries">${sortPages(top, sec.sort).map(entryHTML).join('')}</ul>` : '';
+      list = top.length ? listOf(top, sec.sort) : '';
     }
-    if (!top.length) {
-      body = `<p class="empty">${esc(sec.empty || '')}<br><small><code>${esc(sec.folder)}/</code> にMarkdownファイルを追加すると、ここに表示されます。</small></p>`;
-    }
+    list = top.length
+      ? `${list}<p class="select__empty" hidden>${esc(ui('noResults'))}</p>`
+      : `<p class="select__empty">${esc(sec.empty || '')}<br><small><code>${esc(sec.folder)}/</code> にMarkdownファイルを追加すると、ここに表示されます。</small></p>`;
+
     setMode('menu');
-    app.innerHTML = screenHTML({ crumbs: [{ label: sec.title }], title: sec.title, body, foot: backBtn('#/') });
+    app.innerHTML = selectHTML({
+      title: ui('selectTitle'),
+      head: `<input class="mc-field" type="search" aria-label="${esc(sec.title)}：${esc(ui('searchLabel'))}" placeholder="${esc(sec.title)}を${esc(ui('searchPlaceholder'))}" autocomplete="off">`,
+      list,
+      foot: backBtn('#/'),
+    });
+
+    const input = app.querySelector('.select__head input');
+    input.addEventListener('input', () => {
+      const words = normalize(input.value).split(/\s+/).filter(Boolean);
+      let shown = 0;
+      app.querySelectorAll('.worlds > li').forEach((li) => {
+        const hit = words.length
+          ? words.every((w) => li.dataset.search.includes(w))
+          : !li.hasAttribute('data-child');
+        li.hidden = !hit;
+        if (hit) shown++;
+      });
+      app.querySelectorAll('.world-group').forEach((g) => { g.hidden = !g.querySelector('li:not([hidden])'); });
+      const empty = app.querySelector('.select__empty');
+      if (empty && top.length) empty.hidden = shown > 0;
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !input.value) location.hash = '#/';
+    });
     document.title = `${sec.title} | ${state.config.siteName}`;
   }
 
@@ -292,6 +394,7 @@
     const page = findPage(section, slug);
     const sec = sectionOf(section);
     if (!page || !sec) return renderNotFound();
+    if (isLocked(section)) return renderGate(section);
 
     const md = await getMarkdown(page);
     if (state.route !== `${section}/${slug}`) return;
@@ -318,7 +421,7 @@
     const children = sortPages(state.pages.filter((p) => p.section === section && p.parent === slug), 'order')
       .filter((p) => !linked.has(pageHref(p)));
     const childHTML = children.length
-      ? `<div class="children"><p class="children__label">${esc(ui('children'))}</p><ul class="entries">${children.map(entryHTML).join('')}</ul></div>`
+      ? `<div class="children"><p class="children__label">${esc(ui('children'))}</p><ul class="worlds">${children.map(entryHTML).join('')}</ul></div>`
       : '';
 
     const repo = state.config.repo;
