@@ -12,7 +12,8 @@
   },
   "background": {
     "light": "assets/img/bg/light.webp",
-    "dark": "assets/img/bg/dark.webp"
+    "dark": "assets/img/bg/dark.webp",
+    "blur": 2
   },
   "smallLogo": "assets/img/logo/kc.png",
   "menu": [

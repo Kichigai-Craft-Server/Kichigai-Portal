@@ -627,6 +627,7 @@
     // CSS変数内の相対URLはCSSファイル基準で解決されるため、絶対URLにして渡す
     if (bg.light) root.setProperty('--bg-light', `url("${new URL(bg.light, SITE_ROOT).href}")`);
     if (bg.dark) root.setProperty('--bg-dark', `url("${new URL(bg.dark, SITE_ROOT).href}")`);
+    if (Number.isFinite(Number(bg.blur))) root.setProperty('--bg-blur', `${Number(bg.blur)}px`);
 
     setupLightbox();
     window.addEventListener('hashchange', route);

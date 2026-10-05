@@ -28,6 +28,7 @@
 | `title.splash` | ロゴ横の黄色い文字（複数書くとランダムで1つ表示） |
 | `title.version` / `title.copyright` | 画面下の左右の文字 |
 | `background.light` / `background.dark` | ライトモード／ダークモードの背景画像 |
+| `background.blur` | タイトル画面の背景のぼかし（px。0でぼかしなし） |
 | `menu` | タイトル画面のボタン（`half: true` で半分幅） |
 | `sections` | 各フォルダの見出し・並び順・空のときの文言。`password` を書くとパスワード入力画面が出る（※Publicリポジトリでは誰でも中身を読めるため、目隠し程度の効果） |
 | `list` | 一覧に出す本文の引用文字数（`excerptLength`）、検索対象にする本文の文字数（`searchTextLength`） |
