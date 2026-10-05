@@ -1,6 +1,6 @@
 # キチクラ 公式ポータル
 
-茨城高専電気科OBによるMinecraftマルチサーバー「キチクラ（キチガイクラフト / Kichigai-Craft）」の公式ポータルです。
+「キチクラ（キチガイクラフト / Kichigai-Craft）」の公式ポータルです。
 
 - 公開URL: https://kichigai-craft-server.github.io/Kichigai-Portal/
 - タイトル画面はMinecraft Java Editionのスタート画面風。背景は閲覧端末のライト／ダークモードで切り替わります。
