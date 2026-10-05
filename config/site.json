@@ -15,6 +15,10 @@
     "dark": "assets/img/bg/dark.webp",
     "blur": 2
   },
+  "sound": {
+    "click": "assets/sfx/click.mp3",
+    "volume": 0.5
+  },
   "smallLogo": "assets/img/logo/kc.png",
   "menu": [
     {

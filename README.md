@@ -29,6 +29,7 @@
 | `title.version` / `title.copyright` | 画面下の左右の文字 |
 | `background.light` / `background.dark` | ライトモード／ダークモードの背景画像 |
 | `background.blur` | タイトル画面の背景のぼかし（px。0でぼかしなし） |
+| `sound.click` / `sound.volume` | ボタンを押したときの効果音と音量（0〜1）。`click` を消すと無音 |
 | `menu` | タイトル画面のボタン（`half: true` で半分幅） |
 | `sections` | 各フォルダの見出し・並び順・空のときの文言。`password` を書くとパスワード入力画面が出る（※Publicリポジトリでは誰でも中身を読めるため、目隠し程度の効果） |
 | `list` | 一覧に出す本文の引用文字数（`excerptLength`）、検索対象にする本文の文字数（`searchTextLength`） |
@@ -61,6 +62,7 @@ assets/
   css/style.css          デザイン
   js/app.js              Markdownを読み込んで描画する
   img/                   画像（背景・ロゴ・各ページの画像）
+  sfx/                   効果音
   icons/                 ファビコン類
 .github/workflows/       自動公開の設定
 ```

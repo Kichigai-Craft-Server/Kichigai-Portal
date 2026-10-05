@@ -612,6 +612,42 @@
     dlg.addEventListener('click', (e) => { if (e.target === dlg || e.target === img) dlg.close(); });
   }
 
+  // ボタンのクリック音（config/site.json の sound）。
+  // 音声データは起動時に取得しておき、AudioContext は最初の操作時に作る（自動再生の制限のため）
+  function setupSound() {
+    const conf = state.config.sound || {};
+    if (!conf.click) return;
+    const volume = Math.min(1, Math.max(0, Number(conf.volume ?? 0.5)));
+    const data = fetch(new URL(conf.click, SITE_ROOT).href).then((r) => (r.ok ? r.arrayBuffer() : Promise.reject()));
+    let ctx = null;
+    let buffer = null;
+
+    async function play() {
+      try {
+        if (!ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return;
+          ctx = new AC();
+        }
+        if (ctx.state === 'suspended') await ctx.resume();
+        if (!buffer) buffer = await ctx.decodeAudioData((await data).slice(0));
+        const src = ctx.createBufferSource();
+        const gain = ctx.createGain();
+        src.buffer = buffer;
+        gain.gain.value = volume;
+        src.connect(gain).connect(ctx.destination);
+        src.start();
+      } catch { /* 音が鳴らなくても操作は続ける */ }
+    }
+
+    document.addEventListener('pointerdown', (e) => {
+      if (e.button === 0 && e.target.closest('.mc-btn')) play();
+    }, true);
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('.mc-btn')) play();
+    }, true);
+  }
+
   async function boot() {
     try {
       const [config, index] = await Promise.all([getJSON('config/site.json'), getJSON('pages/index.json')]);
@@ -630,6 +666,7 @@
     if (Number.isFinite(Number(bg.blur))) root.setProperty('--bg-blur', `${Number(bg.blur)}px`);
 
     setupLightbox();
+    setupSound();
     window.addEventListener('hashchange', route);
     route();
   }
